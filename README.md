@@ -2,6 +2,7 @@
 
 M. DENEB ISWANDI
 
-KELAS .NET 
+KELAS .NET TUGAS 4
 
+Entity FrameWork
 Controller-ASp.net Province
