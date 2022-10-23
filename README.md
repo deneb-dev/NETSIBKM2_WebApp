@@ -4,7 +4,7 @@ M. DENEB ISWANDI
 
 KELAS .NET
 
-TUGAS 6
+TUGAS 5
 
 Entity FrameWork
 Controller-ASp.net Province
