@@ -15,10 +15,6 @@ namespace NETSIBKM2_WebApp.Context
         }
 
 
-
-
-
-
         // Mengatur connection string (done)
         // menambahkan model untuk diolah dan / atau migrasi (done)
 
@@ -29,18 +25,9 @@ namespace NETSIBKM2_WebApp.Context
 
         public DbSet<Province> Provinces { get; set; }
         public DbSet<Region> Regions { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<Employee> Employees { get; set; }
     }
 }
-
-
-
-//< select asp -for= "RegionId" class= "form-select" asp - items = "ViewBag.RegionId" >
-
-                    //    < option ></ option >
-
-
-                    //    < option value = "Waktu Indonesia Barat" > Waktu Indonesia Barat</option>
-                    //         <option value = "Waktu Indonesia Tengah" > Waktu Indonesia Tengah</option>
-                    //<option value = "Waktu Indonesia Timur" > Waktu Indonesia Timur</option>
-
-//                </select>

@@ -6,6 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NETSIBKM2_WebApp.Context;
+using NETSIBKM2_WebApp.Handler;
+using NETSIBKM2_WebApp.Repositories.Data;
+using NETSIBKM2_WebApp.Repositories.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +29,20 @@ namespace NETSIBKM2_WebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+
+            // dependence injection
+            services.AddScoped<ProvinceRepository>();
+            services.AddScoped<AccountRepository>();
+
+            //services.AddScoped<Hashing>();
+            
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
             services.AddDbContext<MyContext>(option =>
                 option.UseSqlServer(Configuration.GetConnectionString("MyConnection")));
             services.AddControllersWithViews();
@@ -52,7 +69,7 @@ namespace NETSIBKM2_WebApp
             app.UseRouting();
 
             app.UseAuthorization();
-
+            app.UseSession();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
@@ -61,7 +78,7 @@ namespace NETSIBKM2_WebApp
                 {
                     endpoints.MapControllerRoute(
                         name: "default",
-                        pattern: "{controller=Province}/{action=Index}/{id?}");
+                        pattern: "{controller=Account}/{action=Login}/{id?}");
                 });
             });
         }

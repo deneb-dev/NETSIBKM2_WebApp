@@ -1,36 +1,42 @@
 ﻿using Jint.Runtime.Debugger;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NETSIBKM2_WebApp.Context;
 using NETSIBKM2_WebApp.Models;
+using NETSIBKM2_WebApp.Repositories.Data;
 using System.Linq;
 
 namespace NETSIBKM2_WebApp.Controllers
 {
     public class ProvinceController : Controller
     {
-        MyContext myContext;
+        ProvinceRepository ProvinceRepository;
 
-        public ProvinceController(MyContext myContext)
+        public ProvinceController(ProvinceRepository ProvinceRepository)
         {
-            this.myContext = myContext;
+            this.ProvinceRepository = ProvinceRepository;
         }
 
         // GET ALL
         // GET
         public IActionResult Index()
         {
-            var data = myContext.Provinces.Include(x => x.Region).ToList();
-            return View(data);
-
+            var role = HttpContext.Session.GetString("Role");
+            if (role.Equals("Admin"))
+            {
+                var data = ProvinceRepository.Get();
+                return View(data);
+            }
+            return RedirectToAction("Unauthorized", "ErrorPageController");
         }
 
         // GET BY ID
         // GET
-        public IActionResult Details(int id)
+        public IActionResult Details(int id, Province province)
         {
             //var data = myContext.Provinces.Find(id);
-            var data = myContext.Provinces.Include(x => x.Region).FirstOrDefault(x => x.Id.Equals(id));
+            var data = ProvinceRepository.Get(id, province);
             return View(data);
 
         }
@@ -45,12 +51,12 @@ namespace NETSIBKM2_WebApp.Controllers
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Province country)
+        public IActionResult Create(Province province)
         {
             if (ModelState.IsValid)
             {
-                myContext.Provinces.Add(country);
-                var result = myContext.SaveChanges();
+                //var data = myContext
+                var result = ProvinceRepository.Post(province);
                 if (result > 0)
                     return RedirectToAction("Index");
             }
@@ -69,15 +75,12 @@ namespace NETSIBKM2_WebApp.Controllers
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update(Province country)
+        public IActionResult Update(int id, Province province)
         {
             if (ModelState.IsValid)
             {
-                //myContext.Update(country).State = EntityState.Modified;
-                //myContext.SaveChanges();
-                //return RedirectToAction("Index");
-                myContext.Provinces.UpdateRange(country);
-                var result = myContext.SaveChanges();
+
+                var result = ProvinceRepository.Put(id, province);
                 if (result > 0)
                     return RedirectToAction("Index");
             }
@@ -86,12 +89,12 @@ namespace NETSIBKM2_WebApp.Controllers
 
         // Hapus
         // GET
-        public IActionResult Delete(Province country)
+        public IActionResult Delete(Province province)
         {
             if (ModelState.IsValid)
             {
-                myContext.Provinces.Remove(country);
-                var result = myContext.SaveChanges();
+                //myContext.Provinces.Remove(province);
+                var result = ProvinceRepository.Delete(province);
                 if (result > 0)
                     return RedirectToAction("Index");
             }
