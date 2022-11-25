@@ -36,7 +36,7 @@ namespace NETSIBKM2_WebApp.Controllers
             {
                 //inisialilasi nilai pada session
                 HttpContext.Session.SetString("Role", data.Role);
-                return RedirectToAction("Index", "Province");
+                return RedirectToAction("Index", "Home");
             }
             return View();
         }
